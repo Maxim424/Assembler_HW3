@@ -33,8 +33,8 @@ check_range:
 	mov	edi, 1
 	mov	eax, 2
 	lea	rsi, .LC3[rip]
-	movsd	xmm12, xmm1    # Параматр a, заменили 8[rsp] на xmm12
-	movsd	xmm13, xmm0    # Параматр b, заменили [rsp] на xmm13
+	movsd	xmm12, xmm1    # Параматр b, заменили 8[rsp] на xmm12
+	movsd	xmm13, xmm0    # Параматр a, заменили [rsp] на xmm13
 	call	__printf_chk@PLT
 	movsd	xmm0, xmm13    # Передача параметра в функцию f
 	call	f@PLT      # Вызов функции f
@@ -174,8 +174,8 @@ check_eps:
 	.globl	calculate    # Глобальная функция calculate
 	.type	calculate, @function    # Объявляем, что calculate - это функция
 calculate:
-	movapd	xmm4, xmm0
-	movapd	xmm0, xmm1
+	movapd	xmm4, xmm0    # Параметр a
+	movapd	xmm0, xmm1    # Параметр b
 	sub	rsp, 56
 	subsd	xmm0, xmm4
 	movsd	xmm12, xmm3       # Заменили 40[rsp] на xmm12
@@ -187,8 +187,8 @@ calculate:
 	movsd	xmm13, xmm4    # Заменили 32[rsp] на xmm13, (eps)
 	addsd	xmm2, xmm1
 	mulsd	xmm2, QWORD PTR .LC15[rip]
-	movsd	QWORD PTR 24[rsp], xmm1    # Параметр a
-	movsd	QWORD PTR 16[rsp], xmm2    # Параметр b
+	movsd	QWORD PTR 24[rsp], xmm1    # Параметр b
+	movsd	QWORD PTR 16[rsp], xmm2    # Параметр c
 	call	f@PLT    # Вызов функции f
 	movsd	xmm2, QWORD PTR 16[rsp]
 	movsd	QWORD PTR 8[rsp], xmm0
@@ -198,7 +198,7 @@ calculate:
 	pxor	xmm6, xmm6
 	movsd	xmm2, QWORD PTR 16[rsp]    # Параметр b
 	movsd	xmm1, QWORD PTR 24[rsp]    # Параметр c
-	movsd	xmm4, xmm13    # Параметр eps
+	movsd	xmm4, xmm13
 	cmpltsd	xmm0, xmm6
 	movapd	xmm3, xmm0
 	andpd	xmm1, xmm0

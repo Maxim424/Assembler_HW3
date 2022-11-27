@@ -11,7 +11,7 @@
 	.type	main, @function    # Объявляем, что main - это функция
 main:
 	push	r13    # Пролог функции
-	pxor	xmm0, xmm0
+	pxor	xmm0, xmm0    # Первый параметр в check_range (a)
 	push	r12
 	push	rbp
 	mov	rbp, rsi
@@ -19,9 +19,9 @@ main:
 	mov	ebx, edi
 	sub	rsp, 24
 	mov	rax, QWORD PTR .LC0[rip]
-	movq	xmm1, rax
+	movq	xmm1, rax    # Передача второго параметра в check_range (b)
 	call	check_range@PLT    # Вызов функции check_range
-	test	eax, eax
+	test	eax, eax    # Далее идет if-else оператор для определения количества аргументов командной строки
 	je	.L16
 	lea	r12d, -1[rbx]
 	cmp	r12d, 2
@@ -30,7 +30,7 @@ main:
 	je	.L19
 	cmp	ebx, 2
 	je	.L20
-	mov	rdi, rbp
+	mov	rdi, rbp    # Передача параметра в enter_eps_from_file
 	call	enter_eps_from_file@PLT     # Вызов функции enter_eps_from_file
 	movapd	xmm3, xmm0
 .L6:
@@ -40,15 +40,15 @@ main:
 	test	eax, eax
 	je	.L16
 	call	clock@PLT  # Вызов функции clock  
-	movsd	xmm3, xmm8
-	mov	ebx, 4000000
-	pxor	xmm2, xmm2
+	movsd	xmm3, xmm8    # Передача eps в calculate
+	mov	ebx, 4000000    # Количество повторений
+	pxor	xmm2, xmm2    # Передача c в calculate
 	mov	r13, rax
 .L9:
 	mov	rax, QWORD PTR .LC0[rip]
-	movapd	xmm0, xmm2
+	movapd	xmm0, xmm2    # Передача a в calculate
 	movsd	xmm15, xmm3    # Заменили 8[rsp] на xmm15
-	movq	xmm1, rax
+	movq	xmm1, rax    # Передача b в calculate
 	call	calculate@PLT    # Вызов функции calculate  
 	sub	ebx, 1
 	movsd	xmm3, xmm15
@@ -62,17 +62,17 @@ main:
 	sub	rax, r13
 	cvtsi2sd	xmm0, rax
 	mov	eax, 1
-	divsd	xmm0, QWORD PTR .LC3[rip]
+	divsd	xmm0, QWORD PTR .LC3[rip]    # Передача параметра (строки) в printf
 	call	__printf_chk@PLT    # Вызов функции printf
 	cmp	r12d, 2
 	movsd	xmm1, xmm15
 	je	.L10
-	movapd	xmm0, xmm1
+	movapd	xmm0, xmm1    # Передача result в print_answer_to_console
 	call	print_answer_to_console@PLT    # Вызов функции print_answer_to_console
 	xor	eax, eax
 	jmp	.L1
 .L18:
-	lea	rsi, .LC2[rip]
+	lea	rsi, .LC2[rip]    # Передача параметра (строки) в printf
 	mov	edi, 1
 	xor	eax, eax
 	call	__printf_chk@PLT    # Вызов функции printf
@@ -92,7 +92,7 @@ main:
 	jmp	.L6
 .L10:
 	mov	rdi, rbp
-	movapd	xmm0, xmm1
+	movapd	xmm0, xmm1    # Передача result в print_answer_to_file
 	call	print_answer_to_file@PLT    # Вызов функции print_answer_to_file
 	xor	eax, eax
 	jmp	.L1
